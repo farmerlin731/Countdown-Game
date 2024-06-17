@@ -1,13 +1,16 @@
 import { useRef, useState } from "react";
+import ResultModal from "./ResultModal";
 // let timer; // Forbidden! It will share cross components!
 export default function TimerChallenge({ title, targetTime }) {
   const timer = useRef();
+  const modalRef = useRef();
   const [isRunning, setIsRunning] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
   function handleStart() {
     setIsRunning(true);
     timer.current = setTimeout(() => {
       setIsExpired(true);
+      modalRef.current.showModal();
     }, targetTime * 1000);
   }
 
@@ -18,6 +21,7 @@ export default function TimerChallenge({ title, targetTime }) {
 
   return (
     <section className="challenge">
+      <ResultModal ref={modalRef} targetTime={targetTime} result="lost" />
       <h2>{title}</h2>
       {isExpired && "U r lost!"}
       <p className="challenge-time">
