@@ -10,7 +10,8 @@ export default function TimerChallenge({ title, targetTime }) {
     setIsRunning(true);
     timer.current = setTimeout(() => {
       setIsExpired(true);
-      modalRef.current.showModal();
+      // modalRef.current.showModal();
+      modalRef.current.open();
     }, targetTime * 1000);
   }
 
@@ -23,7 +24,7 @@ export default function TimerChallenge({ title, targetTime }) {
     <section className="challenge">
       <ResultModal ref={modalRef} targetTime={targetTime} result="lost" />
       <h2>{title}</h2>
-      {isExpired && "U r lost!"}
+      {/* {isExpired && "U r lost!"} */}
       <p className="challenge-time">
         {targetTime} second{targetTime > 1 ? "s" : ""}
       </p>
