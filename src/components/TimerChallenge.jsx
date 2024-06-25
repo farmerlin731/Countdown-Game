@@ -4,25 +4,39 @@ import ResultModal from "./ResultModal";
 export default function TimerChallenge({ title, targetTime }) {
   const timer = useRef();
   const modalRef = useRef();
-  const [isRunning, setIsRunning] = useState(false);
-  const [isExpired, setIsExpired] = useState(false);
+
+  const [remainTime, setRemainTime] = useState(targetTime * 1000);
+  const isRunning = remainTime > 0 && remainTime < targetTime * 1000;
+  console.log(remainTime);
+
+  if (remainTime < 0) {
+    handleStop();
+  }
+
   function handleStart() {
-    setIsRunning(true);
-    timer.current = setTimeout(() => {
-      setIsExpired(true);
-      // modalRef.current.showModal();
-      modalRef.current.open();
-    }, targetTime * 1000);
+    //Change to timeInterval to compute score
+    timer.current = setInterval(() => {
+      setRemainTime((pre) => pre - 50);
+    }, 50);
   }
 
   function handleStop() {
-    clearTimeout(timer.current);
-    setIsRunning(false);
+    clearInterval(timer.current);
+    modalRef.current.open();
+  }
+
+  function handleReset() {
+    setRemainTime(targetTime * 1000);
   }
 
   return (
     <section className="challenge">
-      <ResultModal ref={modalRef} targetTime={targetTime} result="lost" />
+      <ResultModal
+        ref={modalRef}
+        targetTime={targetTime}
+        remainTime={remainTime}
+        onReset={handleReset}
+      />
       <h2>{title}</h2>
       {/* {isExpired && "U r lost!"} */}
       <p className="challenge-time">
